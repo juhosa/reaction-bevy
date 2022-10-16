@@ -1,13 +1,17 @@
 use bevy::{prelude::*, app::AppExit};
 use bevy_prototype_lyon::prelude::*;
+use rand::Rng;
 
 const DARK_GRAY: Color = Color::rgb(0.31, 0.31, 0.31);
+
+const WINDOW_WIDTH: f32 = 800.0;
+const WINDOW_HEIGHT: f32 = 600.0;
 
 fn main() {
     let window =  WindowDescriptor {
         title: "re-action bevy".to_string(),
-        width: 800.0,
-        height: 600.0,
+        width: WINDOW_WIDTH,
+        height: WINDOW_HEIGHT,
         ..default()
     };
     
@@ -41,14 +45,15 @@ fn spawn_thingy(mut commands: Commands) {
         origin: RectangleOrigin::Center,
         extents: Vec2 { x: 30.0, y: 30.0 }
     };
+    let mut rng = rand::thread_rng();
     commands.spawn_bundle(GeometryBuilder::build_as(
             &t,
             DrawMode::Fill(FillMode::color(Color::BLACK)),
             // Transform::default()
             Transform {
                 translation: Vec3 { 
-                    x: -100., 
-                    y: 0., 
+                    x: rng.gen_range(-(WINDOW_WIDTH/2.0)..(WINDOW_WIDTH / 2.0)) as f32, 
+                    y: rng.gen_range(-(WINDOW_HEIGHT/2.0)..(WINDOW_HEIGHT/ 2.0)) as f32, 
                     z: 10. },
                 ..default()
             } 
