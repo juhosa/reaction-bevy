@@ -11,17 +11,19 @@ fn main() {
     
     App::new()
         // resources
+        .insert_resource(ClearColor(Color::GRAY))
         .insert_resource(window)
 
         // plugins
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
 
-        // start up systems
+        // start up systems (run only once)
         .add_startup_system(setup_camera)
+        .add_startup_system(spawn_ball)
 
-        // systems
-        .add_system(spawn_ball)
+        // systems (these run on every frame)
+        .add_system(ball_movement)
 
         // run 
         .run();
@@ -29,7 +31,6 @@ fn main() {
 
 #[derive(Component)]
 struct Ball;
-
 
 fn spawn_ball(mut commands: Commands) {
     let ball = shapes::Circle {
@@ -42,6 +43,28 @@ fn spawn_ball(mut commands: Commands) {
             Transform::default()
     ))
     .insert(Ball);
+}
+
+fn ball_movement(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut ball_positions: Query<&mut Transform, With<Ball>>
+    ) {
+    
+    for mut ball in ball_positions.iter_mut() {
+        if keyboard_input.pressed(KeyCode::Left) {
+            ball.translation.x -= 2.;
+        }
+        if keyboard_input.pressed(KeyCode::Right) {
+            ball.translation.x += 2.;
+        }
+        if keyboard_input.pressed(KeyCode::Down) {
+            ball.translation.y -= 2.;
+        }
+        if keyboard_input.pressed(KeyCode::Up) {
+            ball.translation.y += 2.;
+        }
+    }
+
 }
 
 fn setup_camera(mut commands: Commands) {
