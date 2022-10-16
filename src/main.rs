@@ -23,6 +23,7 @@ fn main() {
         // start up systems (run only once)
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_ball)
+        .add_startup_system(spawn_thingy)
 
         // systems (these run on every frame)
         .add_system(ball_movement)
@@ -30,6 +31,30 @@ fn main() {
 
         // run 
         .run();
+}
+
+#[derive(Component)]
+struct Thingy;
+
+fn spawn_thingy(mut commands: Commands) {
+    let t = shapes::Rectangle {
+        origin: RectangleOrigin::Center,
+        extents: Vec2 { x: 30.0, y: 30.0 }
+    };
+    commands.spawn_bundle(GeometryBuilder::build_as(
+            &t,
+            DrawMode::Fill(FillMode::color(Color::BLACK)),
+            // Transform::default()
+            Transform {
+                translation: Vec3 { 
+                    x: -100., 
+                    y: 0., 
+                    z: 10. },
+                ..default()
+            } 
+        )
+    )
+    .insert(Thingy);
 }
 
 #[derive(Component)]
