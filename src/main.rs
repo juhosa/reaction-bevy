@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, app::AppExit};
 use bevy_prototype_lyon::prelude::*;
 
 fn main() {
@@ -24,6 +24,7 @@ fn main() {
 
         // systems (these run on every frame)
         .add_system(ball_movement)
+        .add_system(exit_system)
 
         // run 
         .run();
@@ -69,4 +70,10 @@ fn ball_movement(
 
 fn setup_camera(mut commands: Commands) {
     commands.spawn_bundle(Camera2dBundle::default());
+}
+
+fn exit_system(keyboard_input: Res<Input<KeyCode>>, mut exit: EventWriter<AppExit>) {
+    if keyboard_input.pressed(KeyCode::Q) {
+        exit.send(AppExit);
+    }
 }
