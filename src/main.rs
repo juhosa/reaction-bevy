@@ -1,6 +1,8 @@
 use bevy::{prelude::*, app::AppExit};
 use bevy_prototype_lyon::prelude::*;
 
+const DARK_GRAY: Color = Color::rgb(0.31, 0.31, 0.31);
+
 fn main() {
     let window =  WindowDescriptor {
         title: "re-action bevy".to_string(),
@@ -11,7 +13,7 @@ fn main() {
     
     App::new()
         // resources
-        .insert_resource(ClearColor(Color::GRAY))
+        .insert_resource(ClearColor(DARK_GRAY))
         .insert_resource(window)
 
         // plugins
