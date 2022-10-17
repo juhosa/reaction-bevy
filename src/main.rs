@@ -86,6 +86,12 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
             ])
             .with_style(Style {
                 align_self: AlignSelf::FlexEnd,
+                position_type: PositionType::Absolute,
+                position: UiRect {
+                    top: Val::Px(5.0),
+                    left: Val::Px(5.0),
+                    ..default()
+                },
                 ..default()
             }),
         )
