@@ -19,6 +19,7 @@ fn main() {
         // resources
         .insert_resource(ClearColor(DARK_GRAY))
         .insert_resource(window)
+        .insert_resource(Score(0))
 
         // events
         .add_event::<CollisionEvent>()
@@ -41,6 +42,9 @@ fn main() {
         // run 
         .run();
 }
+
+#[derive(Debug)]
+struct Score(i32);
 
 struct CollisionEvent(Entity);
 
@@ -100,9 +104,15 @@ fn ball_collide(
     }
 }
 
-fn collision_spawn(commands: Commands, mut ev: EventReader<CollisionEvent> ) {
+fn collision_spawn(
+    commands: Commands, 
+    mut ev: EventReader<CollisionEvent>,
+    mut score: ResMut<Score>
+    ) {
     if ev.iter().next().is_some() {
         spawn_thingy(commands);
+        score.0 += 1;
+        // println!("score: {:?}", score);
     }
 }
 
