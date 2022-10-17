@@ -32,12 +32,14 @@ fn main() {
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_ball)
         .add_startup_system(spawn_thingy)
+        .add_startup_system(setup_ui_texts)
 
         // systems (these run on every frame)
         .add_system(ball_movement)
         .add_system(exit_system)
         .add_system(ball_collide)
         .add_system(collision_spawn)
+        .add_system(scoretext_update_system)
 
         // run 
         .run();
@@ -50,6 +52,45 @@ struct CollisionEvent(Entity);
 
 #[derive(Component)]
 struct Thingy;
+
+#[derive(Component)]
+struct ScoreText;
+
+fn scoretext_update_system(
+    mut query: Query<&mut Text, With<ScoreText>>,
+    score: Res<Score>
+    ) {
+    for mut text in &mut query {
+        text.sections[1].value = score.0.to_string();
+    }
+}
+
+fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands
+        .spawn_bundle(
+            // Create a TextBundle that has a Text with a list of sections.
+            TextBundle::from_sections([
+                TextSection::new(
+                    "Score: ",
+                    TextStyle {
+                        font: asset_server.load("font.ttf"),
+                        font_size: 30.0,
+                        color: Color::WHITE,
+                    },
+                ),
+                TextSection::from_style(TextStyle {
+                    font: asset_server.load("font.ttf"),
+                    font_size: 30.0,
+                    color: Color::WHITE,
+                }),
+            ])
+            .with_style(Style {
+                align_self: AlignSelf::FlexEnd,
+                ..default()
+            }),
+        )
+        .insert(ScoreText);
+}
 
 fn spawn_thingy(mut commands: Commands) {
     let t = shapes::Rectangle {
