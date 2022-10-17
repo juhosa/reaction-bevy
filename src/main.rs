@@ -20,6 +20,9 @@ fn main() {
         .insert_resource(ClearColor(DARK_GRAY))
         .insert_resource(window)
 
+        // events
+        .add_event::<CollisionEvent>()
+
         // plugins
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
@@ -32,10 +35,14 @@ fn main() {
         // systems (these run on every frame)
         .add_system(ball_movement)
         .add_system(exit_system)
+        .add_system(ball_collide)
+        .add_system(collision_spawn)
 
         // run 
         .run();
 }
+
+struct CollisionEvent(Entity);
 
 #[derive(Component)]
 struct Thingy;
@@ -49,7 +56,6 @@ fn spawn_thingy(mut commands: Commands) {
     commands.spawn_bundle(GeometryBuilder::build_as(
             &t,
             DrawMode::Fill(FillMode::color(Color::BLACK)),
-            // Transform::default()
             Transform {
                 translation: Vec3 { 
                     x: rng.gen_range(-(WINDOW_WIDTH/2.0)..(WINDOW_WIDTH / 2.0)) as f32, 
@@ -76,6 +82,41 @@ fn spawn_ball(mut commands: Commands) {
             Transform::default()
     ))
     .insert(Ball);
+}
+
+fn ball_collide(
+    mut commands: Commands,
+    ball_positions: Query<&Transform, With<Ball>>,
+    thingy_positions: Query<(Entity, &Transform), With<Thingy>>,
+    mut ev_collision: EventWriter<CollisionEvent>) 
+{
+    for ball in ball_positions.iter() {
+        for (ent, t) in thingy_positions.iter() {
+           if collision(ball.translation, t.translation) {
+               commands.entity(ent).despawn();
+               ev_collision.send(CollisionEvent(ent));
+           }
+        }
+    }
+}
+
+fn collision_spawn(commands: Commands, mut ev: EventReader<CollisionEvent> ) {
+    if ev.iter().next().is_some() {
+        spawn_thingy(commands);
+    }
+}
+
+fn collision(a: Vec3, b: Vec3) -> bool {
+    let radius = 15.0;
+    let thingy_side = 30.0;
+    if a.x - radius < (b.x + thingy_side) &&
+        a.x + radius > b.x && 
+        a.y - radius < (b.y + thingy_side) &&
+        a.y + radius > b.y 
+    {
+        return true
+    }
+    false
 }
 
 fn ball_movement(
