@@ -57,6 +57,9 @@ struct Thingy;
 #[derive(Component)]
 struct ScoreText;
 
+#[derive(Component)]
+struct UIElement;
+
 fn scoretext_update_system(
     mut query: Query<&mut Text, With<ScoreText>>,
     score: Res<Score>
@@ -96,7 +99,8 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..default()
             }),
         )
-        .insert(ScoreText);
+        .insert(ScoreText)
+        .insert(UIElement);
 }
 
 fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -120,7 +124,8 @@ fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             ..default()
         }),
-    );
+    )
+    .insert(UIElement);
 
     // Lines
     let line_width = 2.0;
@@ -133,7 +138,8 @@ fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             &upper_line,
             DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
             Transform::default()
-            ));
+            ))
+        .insert(UIElement);
 
     let lower_line = shapes::Line(
             Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., -(WINDOW_HEIGHT / 2.0) + 40.), 
@@ -144,7 +150,8 @@ fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             &lower_line,
             DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
             Transform::default()
-            ));
+            ))
+        .insert(UIElement);
 
 }
 
