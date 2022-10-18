@@ -99,7 +99,30 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
         .insert(ScoreText);
 }
 
-fn draw_static_ui(mut commands: Commands) {
+fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
+    // [q] quit
+    commands.spawn_bundle(
+        TextBundle::from_section(
+            "[q] Quit",
+            TextStyle {
+                font: asset_server.load("font.ttf"),
+                font_size: 30.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_style(Style {
+            align_self: AlignSelf::FlexEnd,
+            position_type: PositionType::Absolute,
+            position: UiRect {
+                bottom: Val::Px(5.0),
+                left: Val::Px(5.0),
+                ..default()
+            },
+            ..default()
+        }),
+    );
+
+    // Lines
     let line_width = 2.0;
     let upper_line = shapes::Line(
             Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., (WINDOW_HEIGHT / 2.) - 40.), 
