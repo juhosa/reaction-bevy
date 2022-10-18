@@ -40,6 +40,7 @@ fn main() {
         .add_system(ball_collide)
         .add_system(collision_spawn)
         .add_system(scoretext_update_system)
+        .add_system(draw_static_ui)
 
         // run 
         .run();
@@ -96,6 +97,32 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
             }),
         )
         .insert(ScoreText);
+}
+
+fn draw_static_ui(mut commands: Commands) {
+    let line_width = 2.0;
+    let upper_line = shapes::Line(
+            Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., (WINDOW_HEIGHT / 2.) - 40.), 
+            Vec2::new((WINDOW_WIDTH / 2.0) - 20., (WINDOW_HEIGHT / 2.) - 40.), 
+        );
+
+    commands.spawn_bundle(GeometryBuilder::build_as(
+            &upper_line,
+            DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
+            Transform::default()
+            ));
+
+    let lower_line = shapes::Line(
+            Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., -(WINDOW_HEIGHT / 2.0) + 40.), 
+            Vec2::new((WINDOW_WIDTH / 2.0) - 20., -(WINDOW_HEIGHT / 2.) + 40.), 
+        );
+
+    commands.spawn_bundle(GeometryBuilder::build_as(
+            &lower_line,
+            DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
+            Transform::default()
+            ));
+
 }
 
 fn spawn_thingy(mut commands: Commands) {
