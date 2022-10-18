@@ -33,6 +33,7 @@ fn main() {
         .add_startup_system(spawn_ball)
         .add_startup_system(spawn_thingy)
         .add_startup_system(setup_ui_texts)
+        .add_startup_system(draw_static_ui)
 
         // systems (these run on every frame)
         .add_system(ball_movement)
@@ -40,7 +41,6 @@ fn main() {
         .add_system(ball_collide)
         .add_system(collision_spawn)
         .add_system(scoretext_update_system)
-        .add_system(draw_static_ui)
 
         // run 
         .run();
