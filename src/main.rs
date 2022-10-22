@@ -1,9 +1,9 @@
-use bevy::{prelude::*, app::AppExit};
+use bevy::{app::AppExit, prelude::*};
 use bevy_prototype_lyon::prelude::*;
 
 mod ball;
-mod thingy;
 mod components;
+mod thingy;
 
 use ball::BallPlugin;
 use components::{ScoreText, UIElement};
@@ -21,32 +21,27 @@ fn main() {
         height: WINDOW_HEIGHT,
         ..default()
     };
-    
+
     App::new()
         // resources
         .insert_resource(ClearColor(DARK_GRAY))
         .insert_resource(window)
         .insert_resource(Score(0))
-
         // events
         .add_event::<CollisionEvent>()
-
         // plugins
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
         .add_plugin(BallPlugin)
         .add_plugin(ThingyPlugin)
-
         // start up systems (run only once)
         .add_startup_system(setup_camera)
         .add_startup_system(setup_ui_texts)
         .add_startup_system(draw_static_ui)
-
         // systems (these run on every frame)
         .add_system(exit_system)
         .add_system(scoretext_update_system)
-
-        // run 
+        // run
         .run();
 }
 
@@ -55,10 +50,7 @@ struct Score(i32);
 
 struct CollisionEvent(Entity);
 
-fn scoretext_update_system(
-    mut query: Query<&mut Text, With<ScoreText>>,
-    score: Res<Score>
-    ) {
+fn scoretext_update_system(mut query: Query<&mut Text, With<ScoreText>>, score: Res<Score>) {
     for mut text in &mut query {
         text.sections[1].value = score.0.to_string();
     }
@@ -100,56 +92,57 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     // [q] quit
-    commands.spawn_bundle(
-        TextBundle::from_section(
-            "[q] Quit",
-            TextStyle {
-                font: asset_server.load("font.ttf"),
-                font_size: 30.0,
-                color: Color::WHITE,
-            },
-        )
-        .with_style(Style {
-            align_self: AlignSelf::FlexEnd,
-            position_type: PositionType::Absolute,
-            position: UiRect {
-                bottom: Val::Px(5.0),
-                left: Val::Px(5.0),
+    commands
+        .spawn_bundle(
+            TextBundle::from_section(
+                "[q] Quit",
+                TextStyle {
+                    font: asset_server.load("font.ttf"),
+                    font_size: 30.0,
+                    color: Color::WHITE,
+                },
+            )
+            .with_style(Style {
+                align_self: AlignSelf::FlexEnd,
+                position_type: PositionType::Absolute,
+                position: UiRect {
+                    bottom: Val::Px(5.0),
+                    left: Val::Px(5.0),
+                    ..default()
+                },
                 ..default()
-            },
-            ..default()
-        }),
-    )
-    .insert(UIElement);
+            }),
+        )
+        .insert(UIElement);
 
     // Lines
     let line_width = 2.0;
     let upper_line = shapes::Line(
-            Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., (WINDOW_HEIGHT / 2.) - 40.), 
-            Vec2::new((WINDOW_WIDTH / 2.0) - 20., (WINDOW_HEIGHT / 2.) - 40.), 
-        );
+        Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., (WINDOW_HEIGHT / 2.) - 40.),
+        Vec2::new((WINDOW_WIDTH / 2.0) - 20., (WINDOW_HEIGHT / 2.) - 40.),
+    );
 
-    commands.spawn_bundle(GeometryBuilder::build_as(
+    commands
+        .spawn_bundle(GeometryBuilder::build_as(
             &upper_line,
             DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
-            Transform::default()
-            ))
+            Transform::default(),
+        ))
         .insert(UIElement);
 
     let lower_line = shapes::Line(
-            Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., -(WINDOW_HEIGHT / 2.0) + 40.), 
-            Vec2::new((WINDOW_WIDTH / 2.0) - 20., -(WINDOW_HEIGHT / 2.) + 40.), 
-        );
+        Vec2::new(-(WINDOW_WIDTH / 2.0) + 20., -(WINDOW_HEIGHT / 2.0) + 40.),
+        Vec2::new((WINDOW_WIDTH / 2.0) - 20., -(WINDOW_HEIGHT / 2.) + 40.),
+    );
 
-    commands.spawn_bundle(GeometryBuilder::build_as(
+    commands
+        .spawn_bundle(GeometryBuilder::build_as(
             &lower_line,
             DrawMode::Stroke(StrokeMode::new(Color::GRAY, line_width)),
-            Transform::default()
-            ))
+            Transform::default(),
+        ))
         .insert(UIElement);
-
 }
-
 
 fn setup_camera(mut commands: Commands) {
     commands.spawn_bundle(Camera2dBundle::default());
