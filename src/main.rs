@@ -4,10 +4,12 @@ use bevy_prototype_lyon::prelude::*;
 mod ball;
 mod components;
 mod thingy;
+mod trophy;
 
 use ball::BallPlugin;
 use components::{ScoreText, UIElement};
 use thingy::ThingyPlugin;
+use trophy::TrophyPlugin;
 
 const DARK_GRAY: Color = Color::rgb(0.31, 0.31, 0.31);
 
@@ -34,6 +36,7 @@ fn main() {
         .add_plugin(ShapePlugin)
         .add_plugin(BallPlugin)
         .add_plugin(ThingyPlugin)
+        .add_plugin(TrophyPlugin)
         // start up systems (run only once)
         .add_startup_system(setup_camera)
         .add_startup_system(setup_ui_texts)

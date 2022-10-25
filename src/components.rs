@@ -11,3 +11,11 @@ pub struct ScoreText;
 
 #[derive(Component)]
 pub struct UIElement;
+
+#[derive(Component)]
+pub struct Trophy;
+
+#[derive(Component, Debug)]
+pub struct TrophyText {
+    pub score: i32,
+}
