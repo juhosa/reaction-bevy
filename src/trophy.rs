@@ -101,11 +101,11 @@ fn spawn_trophy(mut commands: Commands, asset_server: Res<AssetServer>) {
 
         commands.entity(b).push_children(&[s]);
 
-        let font = asset_server.load("font.ttf");
+        let font = asset_server.load("ProggyClean.ttf");
 
         let text_style = TextStyle {
             font,
-            font_size: 20.,
+            font_size: 25.,
             color: Color::BLACK,
         };
 

@@ -67,13 +67,13 @@ fn setup_ui_texts(mut commands: Commands, asset_server: Res<AssetServer>) {
                 TextSection::new(
                     "Score: ",
                     TextStyle {
-                        font: asset_server.load("font.ttf"),
+                        font: asset_server.load("ProggyClean.ttf"),
                         font_size: 30.0,
                         color: Color::WHITE,
                     },
                 ),
                 TextSection::from_style(TextStyle {
-                    font: asset_server.load("font.ttf"),
+                    font: asset_server.load("ProggyClean.ttf"),
                     font_size: 30.0,
                     color: Color::WHITE,
                 }),
@@ -100,7 +100,7 @@ fn draw_static_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             TextBundle::from_section(
                 "[q] Quit",
                 TextStyle {
-                    font: asset_server.load("font.ttf"),
+                    font: asset_server.load("ProggyClean.ttf"),
                     font_size: 30.0,
                     color: Color::WHITE,
                 },
