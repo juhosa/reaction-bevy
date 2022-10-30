@@ -1,5 +1,5 @@
 use crate::components::Thingy;
-use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::{CollisionEvent, Score, WINDOW_HEIGHT, WINDOW_WIDTH};
 use bevy::prelude::*;
 use bevy_prototype_lyon::prelude::*;
 use rand::Rng;
@@ -8,7 +8,8 @@ pub struct ThingyPlugin;
 
 impl Plugin for ThingyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(spawn_thingy);
+        app.add_startup_system(spawn_thingy)
+            .add_system(collision_spawn);
     }
 }
 
@@ -37,4 +38,16 @@ pub fn spawn_thingy(mut commands: Commands) {
             },
         ))
         .insert(Thingy);
+}
+
+fn collision_spawn(
+    commands: Commands,
+    mut ev: EventReader<CollisionEvent>,
+    mut score: ResMut<Score>,
+) {
+    if ev.iter().next().is_some() {
+        spawn_thingy(commands);
+        score.0 += 1;
+        // println!("score: {:?}", score);
+    }
 }

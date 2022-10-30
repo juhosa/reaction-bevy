@@ -1,8 +1,7 @@
 use bevy::prelude::*;
 use bevy_prototype_lyon::prelude::*;
 
-use crate::thingy::spawn_thingy;
-use crate::{CollisionEvent, Score};
+use crate::CollisionEvent;
 
 use crate::components::{Ball, Thingy};
 
@@ -12,7 +11,6 @@ impl Plugin for BallPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(spawn_ball)
             .add_system(ball_movement)
-            .add_system(collision_spawn)
             .add_system(ball_collide);
     }
 }
@@ -44,18 +42,6 @@ fn ball_collide(
                 ev_collision.send(CollisionEvent(ent));
             }
         }
-    }
-}
-
-fn collision_spawn(
-    commands: Commands,
-    mut ev: EventReader<CollisionEvent>,
-    mut score: ResMut<Score>,
-) {
-    if ev.iter().next().is_some() {
-        spawn_thingy(commands);
-        score.0 += 1;
-        // println!("score: {:?}", score);
     }
 }
 
