@@ -23,7 +23,7 @@ fn setup_storylines(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("ProggyClean.ttf");
     let text_style = TextStyle {
         font,
-        font_size: 20.,
+        font_size: 15.,
         color: Color::GRAY,
     };
     let position = Vec2::new(0., 0.);
