@@ -32,6 +32,7 @@ fn main() {
         .insert_resource(ClearColor(DARK_GRAY))
         .insert_resource(window)
         .insert_resource(Score(0))
+        .insert_resource(ThingyAlpha(1.0))
         // events
         .add_event::<CollisionEvent>()
         // plugins
@@ -55,6 +56,9 @@ fn main() {
 
 #[derive(Debug)]
 struct Score(i32);
+
+#[derive(Debug)]
+struct ThingyAlpha(f32);
 
 struct CollisionEvent(Entity);
 
