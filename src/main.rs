@@ -1,13 +1,16 @@
 use bevy::{app::AppExit, prelude::*};
+use bevy_common_assets::json::JsonAssetPlugin;
 use bevy_prototype_lyon::prelude::*;
 
 mod ball;
 mod components;
+mod storyline;
 mod thingy;
 mod trophy;
 
 use ball::BallPlugin;
-use components::{ScoreText, UIElement};
+use components::{ScoreText, StoryLines, UIElement};
+use storyline::StoryLinePlugin;
 use thingy::ThingyPlugin;
 use trophy::TrophyPlugin;
 
@@ -33,10 +36,12 @@ fn main() {
         .add_event::<CollisionEvent>()
         // plugins
         .add_plugins(DefaultPlugins)
+        .add_plugin(JsonAssetPlugin::<StoryLines>::new(&["json"]))
         .add_plugin(ShapePlugin)
         .add_plugin(BallPlugin)
         .add_plugin(ThingyPlugin)
         .add_plugin(TrophyPlugin)
+        .add_plugin(StoryLinePlugin)
         // start up systems (run only once)
         .add_startup_system(setup_camera)
         .add_startup_system(setup_ui_texts)
