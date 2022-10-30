@@ -75,6 +75,7 @@ fn collision(a: Vec3, b: Vec3) -> bool {
 fn ball_movement(
     keyboard_input: Res<Input<KeyCode>>,
     mut ball_positions: Query<&mut Transform, With<Ball>>,
+    thingy: Query<&Transform, (With<Thingy>, Without<Ball>)>,
 ) {
     for mut ball in ball_positions.iter_mut() {
         if keyboard_input.pressed(KeyCode::Left) || keyboard_input.pressed(KeyCode::A) {
@@ -88,6 +89,11 @@ fn ball_movement(
         }
         if keyboard_input.pressed(KeyCode::Up) || keyboard_input.pressed(KeyCode::W) {
             ball.translation.y += 2.;
+        }
+        if keyboard_input.just_pressed(KeyCode::F) {
+            let t = thingy.single();
+            ball.translation.x = t.translation.x;
+            ball.translation.y = t.translation.y;
         }
     }
 }
