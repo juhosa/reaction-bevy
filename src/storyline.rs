@@ -1,11 +1,8 @@
 use crate::{
-    components::{StoryLines, Thingy},
+    components::{StoryLines, TextLine, Thingy},
     Score,
 };
 use bevy::prelude::*;
-
-#[derive(Component)]
-struct TextLine;
 
 pub struct StoryLinePlugin;
 
@@ -18,7 +15,7 @@ impl Plugin for StoryLinePlugin {
 
 fn setup_storylines(mut commands: Commands, asset_server: Res<AssetServer>) {
     // load storylines
-    let handle: Handle<StoryLines> = asset_server.load("storylines-dev.json");
+    let handle: Handle<StoryLines> = asset_server.load("storylines.json");
     commands.insert_resource(handle);
     let font = asset_server.load("ProggyClean.ttf");
     let text_style = TextStyle {

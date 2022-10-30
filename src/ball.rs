@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_prototype_lyon::prelude::*;
 
-use crate::CollisionEvent;
+use crate::{AppState, CollisionEvent};
 
 use crate::components::{Ball, Thingy};
 
@@ -9,9 +9,13 @@ pub struct BallPlugin;
 
 impl Plugin for BallPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(spawn_ball)
-            .add_system(ball_movement)
-            .add_system(ball_collide);
+        app.add_startup_system(spawn_ball).add_system_set(
+            SystemSet::on_update(AppState::InGame)
+                .with_system(ball_movement)
+                .with_system(ball_collide),
+        );
+        // .add_system(ball_movement)
+        // .add_system(ball_collide);
     }
 }
 

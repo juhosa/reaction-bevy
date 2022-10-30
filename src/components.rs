@@ -31,3 +31,6 @@ pub struct StoryLine {
     pub line: String,
     pub appears_at: i32,
 }
+
+#[derive(Component)]
+pub struct TextLine;
